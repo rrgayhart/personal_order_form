@@ -10,6 +10,8 @@ Set up testing framework to run on one command and in its own folder
 
 Update month frequency of order
 
+Let frequency accept other quantities of time (like days, weeks, years)
+
 Long terms
 ----------
 Set up script to write the original JSON file and create backup
