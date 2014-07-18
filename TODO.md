@@ -1,18 +1,16 @@
-Move files into folder structure
+Move files into folder structure **Do with Kelly**
 
-Finish tests for order_form
+Add a README.md **Do with Kelly**
 
-Remove puts commands from Read-Object-JSON
+Finish tests and refactor for order_form
 
 Test Read-Object-JSON
 
 Set up testing framework to run on one command and in its own folder
 
-Set up run.rb to run the console framework
-
 Update month frequency of order
 
 Long terms
 ----------
-Set up script to write the original backup
-Script to write backup files
+Set up script to write the original JSON file and create backup
+Script to write backup files every few days
