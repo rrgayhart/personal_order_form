@@ -1,4 +1,8 @@
+Move files into folder structure
+
 Finish tests for order_form
+
+Remove puts commands from Read-Object-JSON
 
 Test Read-Object-JSON
 
