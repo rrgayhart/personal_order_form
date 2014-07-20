@@ -1,18 +1,12 @@
 require('./engine')
+require_relative('utility')
 
 class OrderForm
   attr_accessor :order_data
+  include Utility
 
   def initialize(incoming_order_data)
     @order_data ||= incoming_order_data
-  end
-
-  def normalize_today
-    Date.today.strftime('%m/%d/%Y')
-  end
-
-  def convert_date(date)
-    Date.strptime(date, '%m/%d/%Y')
   end
 
   def update_purchase_by_name(attrs=nil)

@@ -67,4 +67,12 @@ class OrderFormTest < MiniTest::Unit::TestCase
     assert_equal pretty_printed_collection, @of.pretty_print_list(@sample_data)
   end
 
+  def test_get_due_by_store_returns_items_by_store
+    skip
+  end
+
+  def test_get_due_by_store_defaults_to_all_due
+    skip
+  end
+
 end
