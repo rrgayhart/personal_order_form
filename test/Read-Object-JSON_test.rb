@@ -1,5 +1,5 @@
 require 'minitest/autorun'
-require_relative 'engine'
+require_relative '../lib/engine'
 
 class ObjListTest < MiniTest::Unit::TestCase
 

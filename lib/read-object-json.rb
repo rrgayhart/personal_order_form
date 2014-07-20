@@ -1,4 +1,4 @@
-require('./engine')
+require_relative('engine')
 
 class ReadObjectJSON
   attr_reader :order_form
@@ -9,7 +9,7 @@ class ReadObjectJSON
   end
 
   def file
-    File.read('temp.json')
+    File.read('../db/temp.json')
   end
 
   def get_order_data
@@ -17,7 +17,7 @@ class ReadObjectJSON
   end
 
   def write_to_file(order_data)
-    File.open('temp.json', 'w') do |f|
+    File.open('../db/temp.json', 'w') do |f|
       f.write(order_form.order_data.to_json)
     end
   end

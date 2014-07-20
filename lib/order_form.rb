@@ -1,4 +1,4 @@
-require('./engine')
+require_relative('engine')
 require_relative('utility')
 
 class OrderForm
