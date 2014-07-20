@@ -1,24 +1,17 @@
 require_relative('engine')
 
 class ReadObjectJSON
-  attr_reader :order_form
-
-  def initialize
-    pulled_data = get_order_data
-    @order_form ||= OrderForm.new(pulled_data)
+  def self.read_file(file)
+    File.read(file)
   end
 
-  def file
-    File.read('../db/temp.json')
+  def self.get_order_data(file)
+    JSON.parse(read_file(file))
   end
 
-  def get_order_data
-    JSON.parse(file)
-  end
-
-  def write_to_file(order_data)
-    File.open('../db/temp.json', 'w') do |f|
-      f.write(order_form.order_data.to_json)
+  def self.write_to_file(order_data, file)
+    File.open(file, 'w') do |f|
+      f.write(order_data.to_json)
     end
   end
 end

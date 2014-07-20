@@ -3,14 +3,22 @@ require_relative('utility')
 
 class OrderForm
   attr_accessor :order_data
+
   include Utility
 
   def initialize(incoming_order_data)
-    @order_data ||= incoming_order_data
+    @order_data = incoming_order_data
+  end
+
+  def display_by_name(name)
+    names_list = order_data.select do |d|
+      d['name'].downcase == name
+    end
+    pretty_print_list(names_list)
   end
 
   def update_purchase_by_name(attrs=nil)
-    updates = order_data.each do |d|
+    updates = @order_data.each do |d|
       if d['name'].downcase == attrs[:name].downcase
         d[attrs[:field]] = attrs[:field_value]
       end
@@ -41,7 +49,7 @@ class OrderForm
 
   def due_or_past_due
     order_data.select do |d|
-      d['monthsTillDue'] < 1
+      months_until_purchase(d) < 1
     end
   end
 

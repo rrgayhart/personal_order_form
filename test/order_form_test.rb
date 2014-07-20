@@ -6,9 +6,9 @@ class OrderFormTest < MiniTest::Unit::TestCase
   def setup
     @today = Date.today.strftime('%m/%d/%Y')
     @four_months_ago = Date.today.prev_month.prev_month.prev_month.prev_month.strftime('%m/%d/%Y')
-    @sample_data = [{"name"=>"toilet paper", "frequency"=>"4 months", "locations"=>["costco", "safeway"], "lastPurchase"=>@four_months_ago, "monthsTillDue"=>0},
-    {"name"=>"tooth paste", "frequency"=>"4 months", "locations"=>["amazon", "costco", "safeway"], "lastPurchase"=>@today, "monthsTillDue"=>1},
-    {"name"=>"shaving cream", "frequency"=>"2 months", "locations"=>["amazon"], "lastPurchase"=>@four_months_ago, "monthsTillDue"=>0}]
+    @sample_data = [{"name"=>"toilet paper", "frequency"=>"4 months", "locations"=>["costco", "safeway"], "lastPurchase"=>@four_months_ago},
+    {"name"=>"tooth paste", "frequency"=>"4 months", "locations"=>["amazon", "costco", "safeway"], "lastPurchase"=>@today},
+    {"name"=>"shaving cream", "frequency"=>"2 months", "locations"=>["amazon"], "lastPurchase"=>@four_months_ago}]
     @of = OrderForm.new(@sample_data)
   end
 
