@@ -14,7 +14,7 @@ class OrderForm
     names_list = order_data.select do |d|
       d['name'].downcase == name
     end
-    pretty_print_list(names_list)
+    full_pretty_print_list(names_list)
   end
 
   def update_purchase_by_name(attrs=nil)
@@ -72,5 +72,17 @@ class OrderForm
 
   def update_purchase_date(item_name)
     update_purchase_by_name(item_name)
+  end
+
+  def full_pretty_print(d)
+    response = [d['name'] + ':','bought every', d['frequency'], '(', d['lastPurchase'], ')', 'at']
+    response.push(d['locations'].join(' or '))
+    response.join(' ')
+  end
+
+  def full_pretty_print_list(list)
+    list.collect do |d|
+      full_pretty_print(d)
+    end.join("\n")
   end
 end

@@ -67,12 +67,9 @@ class OrderFormTest < MiniTest::Unit::TestCase
     assert_equal pretty_printed_collection, @of.pretty_print_list(@sample_data)
   end
 
-  def test_get_due_by_store_returns_items_by_store
-    skip
-  end
-
-  def test_get_due_by_store_defaults_to_all_due
-    skip
+  def test_full_pretty_print_list
+    answer = "toilet paper: bought every 4 months ( 03/20/2014 ) at costco or safeway\ntooth paste: bought every 4 months ( 07/20/2014 ) at amazon or costco or safeway\nshaving cream: bought every 2 months ( 03/20/2014 ) at amazon"
+    assert_equal answer, @of.full_pretty_print_list(@sample_data)
   end
 
 end

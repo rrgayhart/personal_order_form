@@ -5,6 +5,7 @@ require_relative('./read-object-json')
 
 class Engine
   attr_accessor :order_form, :file_name
+
   def initialize(input)
     @file_name = select_file(input)
     data = ReadObjectJSON.get_order_data(file_name)

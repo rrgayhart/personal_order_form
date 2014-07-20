@@ -7,7 +7,7 @@ class Run
   def initialize(input = $stdin, output = $stdout)
     @input = input
     @output = output
-    @engine = Engine.new('production')
+    @engine = Engine.new('development')
     run('init')
   end
 
