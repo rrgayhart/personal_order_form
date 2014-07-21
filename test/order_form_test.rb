@@ -68,9 +68,9 @@ class OrderFormTest < MiniTest::Unit::TestCase
   end
 
   def test_full_pretty_print_list
-    answer = "shaving cream: bought every 2 months ( 03/20/2014 ) at amazon\n" +
-    "toilet paper: bought every 4 months ( 03/20/2014 ) at costco or safeway\n" +
-    "tooth paste: bought every 4 months ( 07/20/2014 ) at amazon or costco or safeway"
+    answer = "shaving cream: bought every 2 months ( " + @four_months_ago + " ) at amazon\n" +
+    "toilet paper: bought every 4 months ( "+ @four_months_ago + " ) at costco or safeway\n" +
+    "tooth paste: bought every 4 months ( " + @today + " ) at amazon or costco or safeway"
     assert_equal answer, @of.full_pretty_print_list(@sample_data)
   end
 
