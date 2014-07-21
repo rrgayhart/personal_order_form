@@ -2,67 +2,51 @@ require_relative('engine')
 require_relative('utility')
 
 class OrderForm
-  attr_accessor :order_data
+  attr_accessor :order_items
 
   include Utility
 
   def initialize(incoming_order_data)
-    @order_data = incoming_order_data
+    @order_items = create_order_items(incoming_order_data)
+  end
+
+  def create_order_items(order_data)
+    order_data.collect do |data|
+      OrderItem.new(data)
+    end
+  end
+
+  def convert_order_items_to_hash
+    order_items.collect do |item|
+      item.convert
+    end
   end
 
   def display_by_name(name)
-    names_list = order_data.select do |d|
-      d['name'].downcase == name
+    names_list = order_items.select do |d|
+      d.name.downcase == name
     end
     full_pretty_print_list(names_list)
   end
 
-  def update_purchase_by_name(attrs=nil)
-    updates = @order_data.each do |d|
-      if d['name'].downcase == attrs[:name].downcase
-        d[attrs[:field]] = attrs[:field_value]
-      end
-    end
-    @order_data = updates
-  end
-
   def set_as_purchased_today(input_name)
-    today_update = {name: input_name, field: 'lastPurchase', field_value: normalize_today}
-    update_purchase_by_name(today_update)
-  end
-
-  def get_frequency(freq_date)
-    freq_date.scan(/\d+/).first.to_i
-  end
-
-  def months_since_last_purchase(purch_date)
-    year_difference = (Date.today.year - convert_date(purch_date).year) * 12
-    month_difference = Date.today.month - convert_date(purch_date).month
-    year_difference + month_difference
-  end
-
-  def months_until_purchase(purchase)
-    purch_date = purchase['lastPurchase']
-    freq_date = purchase['frequency']
-    get_frequency(freq_date) - months_since_last_purchase(purch_date)
-  end
-
-  def due_or_past_due
-    order_data.select do |d|
-      months_until_purchase(d) < 1
+    @order_items.each do |item|
+      if input_name == item.name
+        item.update_item({field: 'last_purchase', field_value: normalize_today})
+      end
     end
   end
 
   def pretty_print_list(list)
     list.collect do |d|
-      d['name'] + ' | ' + d['locations'].join(' ')
+      d.name + ' | ' + d.locations.join(' ')
     end
   end
 
   def get_due_by_store(attrs = nil)
     if attrs
-      answer = due_or_past_due.select do |d|
-        d['locations'].join(' ').downcase.include?(attrs.downcase)
+      answer = due_or_past_due.select do |item|
+        item.locations.join(' ').downcase.include?(attrs.downcase)
       end
     else
       answer = due_or_past_due
@@ -70,13 +54,19 @@ class OrderForm
     pretty_print_list(answer)
   end
 
+  def due_or_past_due
+    order_items.select do |item|
+      item.months_until_purchase < 1
+    end
+  end
+
   def update_purchase_date(item_name)
     update_purchase_by_name(item_name)
   end
 
-  def full_pretty_print(d)
-    response = [d['name'] + ':','bought every', d['frequency'], '(', d['lastPurchase'], ')', 'at']
-    response.push(d['locations'].join(' or '))
+  def full_pretty_print(item)
+    response = [item.name, ':', 'bought every', item.combine_frequency, '(', item.last_purchase, ')', 'at']
+    response.push(item.locations.join(' or '))
     response.join(' ')
   end
 
@@ -87,14 +77,10 @@ class OrderForm
   end
 
   def see_all
-    full_pretty_print_list(order_data)
-  end
-
-  def is_valid_item?(new_item)
-    true
+    full_pretty_print_list(order_items)
   end
 
   def add_new_item(new_item)
-    order_data.push(new_item)
+    order_items.push(OrderItem.new(new_item))
   end
 end

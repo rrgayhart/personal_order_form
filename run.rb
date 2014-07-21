@@ -79,15 +79,11 @@ class Run
                 'lastPurchase' => date,
                 'locations' => locations
                }
-    if engine.is_valid_item?(unformatted_new_item)
-      confirm_new_item(unformatted_new_item)
-    else
-      output.puts 'Your item was inputed incorrectly'
-    end
+    confirm_new_item(unformatted_new_item)
   end
 
   def confirm_new_item(unformatted_new_item)
-    output.puts engine.print_one_item(unformatted_new_item)
+    output.puts engine.print_one_hash(unformatted_new_item)
     output.puts 'Is this item correct? Enter yes or no.'
     confirmation = input.gets.chomp
     if confirmation == 'yes'

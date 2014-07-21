@@ -13,73 +13,47 @@ class OrderFormTest < MiniTest::Unit::TestCase
   end
 
   def test_it_has_things
-    assert_equal 3, @of.order_data.length
+    assert_equal 3, @of.order_items.length
   end
 
   def test_it_sets_purchased_today
-    refute_equal @today, @of.order_data.first['lastPurchase']
-    @of.set_as_purchased_today(@of.order_data.first['name'])
-    assert_equal @today, @of.order_data.first['lastPurchase']
-  end
-
-  def test_it_updates_purchase_by_name
-    existing_product = @of.order_data.first['name']
-    @of.update_purchase_by_name({name: existing_product, field: 'lastPurchase', field_value: '5/15/2014'})
-    assert_equal '5/15/2014', @of.order_data.first['lastPurchase']
+    refute_equal @today, @of.order_items.first.last_purchase
+    @of.set_as_purchased_today(@sample_data.first['name'])
+    assert_equal @today, @of.order_items.first.last_purchase
   end
 
   def test_it_does_not_create_nonexistant_name
-    assert_equal 3, @of.order_data.length
+    assert_equal 3, @of.order_items.length
     not_existing_product = 'BANANA FARMS'
-    @of.update_purchase_by_name({name: not_existing_product, field: 'lastPurchase', field_value: '5/15/2014'})
-    assert_equal 3, @of.order_data.length
-  end
-
-  def test_it_gets_purchase_frequency
-    answer = 3
-    assert_equal answer, @of.get_frequency('3 months')
-  end
-
-  def test_it_gets_months_since_last_purchase
-    assert_equal 4, @of.months_since_last_purchase(@four_months_ago)
-  end
-
-  def test_it_gets_months_since_last_purchase_over_a_year_ago
-    one_year_one_month_ago = Date.today.prev_year.prev_month.strftime('%m/%d/%Y')
-    assert_equal 13, @of.months_since_last_purchase(one_year_one_month_ago)
-  end
-
-  def test_it_gets_months_until_purchase_due
-    assert_equal 0, @of.months_until_purchase(@sample_data[0])
-    assert_equal 4, @of.months_until_purchase(@sample_data[1])
-    assert_equal -2, @of.months_until_purchase(@sample_data[2])
+    @of.set_as_purchased_today(not_existing_product)
+    assert_equal 3, @of.order_items.length
   end
 
   def test_it_pulls_due_or_past_due_products
     assert_equal 2, @of.due_or_past_due.length
-    assert_includes(@of.due_or_past_due, @sample_data[0])
-    assert_includes(@of.due_or_past_due, @sample_data[2])
-    refute_includes(@of.due_or_past_due, @sample_data[1])
-  end
-
-  def test_pretty_print_list_formats_correctly
-    pretty_printed_collection = ["toilet paper | costco safeway", "tooth paste | amazon costco safeway", "shaving cream | amazon"]
-    assert_equal pretty_printed_collection, @of.pretty_print_list(@sample_data)
-  end
-
-  def test_full_pretty_print_list
-    answer = "shaving cream: bought every 2 months ( " + @four_months_ago + " ) at amazon\n" +
-    "toilet paper: bought every 4 months ( "+ @four_months_ago + " ) at costco or safeway\n" +
-    "tooth paste: bought every 4 months ( " + @today + " ) at amazon or costco or safeway"
-    assert_equal answer, @of.full_pretty_print_list(@sample_data)
+    names = @of.due_or_past_due.collect do |item|
+      item.name
+    end
+    assert_includes(names, 'toilet paper')
+    assert_includes(names, 'shaving cream')
+    refute_includes(names, 'tooth paste')
   end
 
   def test_add_new_item_updates
-    assert_equal 3, @of.order_data.length
+    assert_equal 3, @of.order_items.length
     new_item = {'name' => 'paper towels', 'frequency' => '3 months', 'lastPurchase' => '3', 'locations' => ['costco', 'target'] }
     @of.add_new_item(new_item)
-    assert_equal 4, @of.order_data.length
-    assert_equal 'paper towels', @of.order_data.last['name']
+    assert_equal 4, @of.order_items.length
+    assert_equal 'paper towels', @of.order_items.last.name
+  end
+
+  def test_it_creates_order_items
+    assert_equal @sample_data.length, @of.order_items.count
+    assert_equal OrderItem, @of.order_items.first.class
+  end
+
+  def test_it_converts_order_items_to_hash
+    assert_equal @sample_data, @of.convert_order_items_to_hash
   end
 
 end

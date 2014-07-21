@@ -27,6 +27,11 @@ class Engine
     order_form.get_due_by_store
   end
 
+  def print_one_hash(hash)
+    oi = OrderItem.new(hash)
+    print_one_item(oi)
+  end
+
   def print_one_item(item)
     order_form.full_pretty_print(item)
   end
@@ -39,10 +44,6 @@ class Engine
     order_form.set_as_purchased_today(name)
   end
 
-  def is_valid_item?(new_item)
-    order_form.is_valid_item?(new_item)
-  end
-
   def add_new_item(new_item)
     order_form.add_new_item(new_item)
   end
@@ -52,7 +53,8 @@ class Engine
   end
 
   def save
-    ReadObjectJSON.write_to_file(order_form.order_data, file_name)
+    items_hash = order_form.convert_order_items_to_hash
+    ReadObjectJSON.write_to_file(items_hash, file_name)
   end
 end
 

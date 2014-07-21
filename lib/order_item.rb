@@ -3,14 +3,16 @@ require_relative('utility')
 
 class OrderItem
 
-  attr_reader :item_hash, :name, :freq_count, :freq_type, :last_purchased, :locations
+  attr_accessor :item_hash, :name, :freq_count, :freq_type, :last_purchase, :locations
+
+  include Utility
 
   def initialize(item_hash)
     @item_hash = item_hash
     @name = get_name
     @freq_count = parse_frequency[0]
     @freq_type = parse_frequency[1]
-    @last_purchased = parse_purchased_date
+    @last_purchase = parse_purchased_date
     @locations = get_locations
   end
 
@@ -23,8 +25,16 @@ class OrderItem
     [split[0].to_i, split[1]]
   end
 
-  def order_keys
-    ['name', 'frequency', 'locations', 'lastPurchased']
+  def convert
+    {'name' => self.name,
+     'frequency' => combine_frequency,
+     'locations' => self.locations,
+     'lastPurchase' => self.last_purchase
+    }
+  end
+
+  def combine_frequency
+    [self.freq_count, ' ', self.freq_type].join
   end
 
   def parse_purchased_date
@@ -33,6 +43,24 @@ class OrderItem
 
   def get_locations
     item_hash['locations']
+  end
+
+  def update_item(attrs)
+    case attrs[:field]
+    when 'last_purchase'
+      self.last_purchase = attrs[:field_value]
+    end
+  end
+
+  def months_since_last_purchase(purch_date)
+    year_difference = (Date.today.year - convert_date(purch_date).year) * 12
+    month_difference = Date.today.month - convert_date(purch_date).month
+    year_difference + month_difference
+  end
+
+  def months_until_purchase
+    purch_date = self.last_purchase
+    self.freq_count - months_since_last_purchase(purch_date)
   end
 
 end
