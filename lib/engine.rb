@@ -26,12 +26,28 @@ class Engine
     order_form.get_due_by_store
   end
 
+  def print_one_item(item)
+    order_form.full_pretty_print(item)
+  end
+
   def display_by_name(name)
     order_form.display_by_name(name)
   end
 
   def update_by_name(name)
     order_form.set_as_purchased_today(name)
+  end
+
+  def is_valid_item?(new_item)
+    order_form.is_valid_item?(new_item)
+  end
+
+  def add_new_item(new_item)
+    order_form.add_new_item(new_item)
+  end
+
+  def see_all
+    order_form.see_all
   end
 
   def save

@@ -68,8 +68,18 @@ class OrderFormTest < MiniTest::Unit::TestCase
   end
 
   def test_full_pretty_print_list
-    answer = "toilet paper: bought every 4 months ( 03/20/2014 ) at costco or safeway\ntooth paste: bought every 4 months ( 07/20/2014 ) at amazon or costco or safeway\nshaving cream: bought every 2 months ( 03/20/2014 ) at amazon"
+    answer = "shaving cream: bought every 2 months ( 03/20/2014 ) at amazon\n" +
+    "toilet paper: bought every 4 months ( 03/20/2014 ) at costco or safeway\n" +
+    "tooth paste: bought every 4 months ( 07/20/2014 ) at amazon or costco or safeway"
     assert_equal answer, @of.full_pretty_print_list(@sample_data)
+  end
+
+  def test_add_new_item_updates
+    assert_equal 3, @of.order_data.length
+    new_item = {'name' => 'paper towels', 'frequency' => '3 months', 'lastPurchase' => '3', 'locations' => ['costco', 'target'] }
+    @of.add_new_item(new_item)
+    assert_equal 4, @of.order_data.length
+    assert_equal 'paper towels', @of.order_data.last['name']
   end
 
 end

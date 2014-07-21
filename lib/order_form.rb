@@ -83,6 +83,18 @@ class OrderForm
   def full_pretty_print_list(list)
     list.collect do |d|
       full_pretty_print(d)
-    end.join("\n")
+    end.sort.join("\n")
+  end
+
+  def see_all
+    full_pretty_print_list(order_data)
+  end
+
+  def is_valid_item?(new_item)
+    true
+  end
+
+  def add_new_item(new_item)
+    order_data.push(new_item)
   end
 end
