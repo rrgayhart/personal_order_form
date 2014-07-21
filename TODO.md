@@ -1,7 +1,9 @@
 Small Code Challenges
 ----------
 
-Add a README.md
+Add confirmation to save and close
+
+Add validations on creating order items
 
 Update month frequency of order
 
@@ -21,6 +23,8 @@ Hook up ENV variables to change out files being read from
 Split order_form into either:
 - order_form and order_item classes
 - order_form and output_form classes
+
+Add a README.md
 
 Long terms
 ----------
