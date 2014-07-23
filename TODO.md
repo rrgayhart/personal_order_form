@@ -1,7 +1,7 @@
 Small Code Challenges
 ----------
 
-Add confirmation to save and close
+Break out run and test run
 
 Add validations on creating order items
 
@@ -11,18 +11,12 @@ Let frequency accept other quantities of time (like days, weeks, years)
 
 Allow user to edit order items
 
-Allow user to delete order items
-
-Hook up display by store (due soon)
+Hook up display by store (for due soon)
 -Also, display all per store - sorted alphabetically
 
 Add stars to the front of items due soon in display all views
 
 Hook up ENV variables to change out files being read from
-
-Split order_form into either:
-- order_form and order_item classes
-- order_form and output_form classes
 
 Add a README.md
 

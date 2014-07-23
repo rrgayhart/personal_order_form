@@ -56,4 +56,9 @@ class OrderFormTest < MiniTest::Unit::TestCase
     assert_equal @sample_data, @of.convert_order_items_to_hash
   end
 
+  def test_delete_items
+    assert_equal 3, @of.order_items.length
+    @of.remove(@of.order_items.first.name)
+    assert_equal 2, @of.order_items.length
+  end
 end

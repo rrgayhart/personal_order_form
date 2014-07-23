@@ -60,10 +60,6 @@ class OrderForm
     end
   end
 
-  def update_purchase_date(item_name)
-    update_purchase_by_name(item_name)
-  end
-
   def full_pretty_print(item)
     response = [item.name, ':', 'bought every', item.combine_frequency, '(', item.last_purchase, ')', 'at']
     response.push(item.locations.join(' or '))
@@ -82,5 +78,12 @@ class OrderForm
 
   def add_new_item(new_item)
     order_items.push(OrderItem.new(new_item))
+  end
+
+  def remove(name)
+    updated_list = order_items.reject do |item|
+      name == item.name
+    end
+    @order_items = updated_list
   end
 end

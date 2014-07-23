@@ -52,6 +52,10 @@ class Engine
     order_form.see_all
   end
 
+  def delete(name)
+    order_form.remove(name)
+  end
+
   def save
     items_hash = order_form.convert_order_items_to_hash
     ReadObjectJSON.write_to_file(items_hash, file_name)

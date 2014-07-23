@@ -17,7 +17,8 @@ class Run
      ['save', 'Save changes and exit'],
      ['due', 'See all upcoming and due items'],
      ['all', 'See all items'],
-     ['new', 'Add a new item']
+     ['new', 'Add a new item'],
+     ['delete ITEM NAME', 'Delete item by name']
     ]
   end
 
@@ -56,10 +57,39 @@ class Run
     when 'new'
       get_new_item
       prompt
+    when /^delete(.*)$/
+      name = $1.strip
+      confirm_delete(name)
+      prompt
     when 'save'
-      save_and_quit
+      confirm_save
+      prompt
     when 'quit'
       output.puts 'Goodbye'
+    else
+      output.puts 'Command ' + user_input + 'not recognized.'
+      prompt
+    end
+  end
+
+  def confirm_save
+    see_all
+    output.puts '-' * 20
+    output.puts 'Confirm save of all changes to db: (yes/no)'
+    confirmation = input.gets.chomp
+    if confirmation == 'yes'
+      save_to_file
+    end
+  end
+
+  def confirm_delete(name)
+    output.puts 'Confirm delete of the following items: (yes/no)'
+    items_for_delete = engine.display_by_name(name)
+    output.puts items_for_delete
+    confirmation = input.gets.chomp
+    if confirmation == 'yes'
+      delete_by_name(name)
+      output.puts items_for_delete + ' has been removed'
     end
   end
 
@@ -94,6 +124,11 @@ class Run
     end
   end
 
+  def delete_by_name(name)
+    output.puts name
+    engine.delete(name)
+  end
+
   def see_all_due
     output.puts engine.start_print
   end
@@ -111,7 +146,7 @@ class Run
     end
   end
 
-  def save_and_quit
+  def save_to_file
     engine.save
   end
 end
