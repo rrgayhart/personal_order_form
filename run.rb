@@ -18,7 +18,8 @@ class Run
      ['due', 'See all upcoming and due items'],
      ['all', 'See all items'],
      ['new', 'Add a new item'],
-     ['delete ITEM NAME', 'Delete item by name']
+     ['delete ITEM NAME', 'Delete item by name'],
+     ['make list', 'Adds an omnifocus task']
     ]
   end
 
@@ -61,6 +62,9 @@ class Run
       name = $1.strip
       confirm_delete(name)
       prompt
+    when 'make list'
+      write_to_omnifocus
+      prompt
     when 'save'
       confirm_save
       prompt
@@ -70,6 +74,11 @@ class Run
       output.puts 'Command ' + user_input + 'not recognized.'
       prompt
     end
+  end
+
+  def write_to_omnifocus
+    puts 'Sending a list of all upcoming due purchases to Omnifocus'
+    engine.write_to_omnifocus
   end
 
   def confirm_save

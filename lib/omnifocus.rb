@@ -2,12 +2,18 @@ require 'appscript';include Appscript
 
 class OmniFocus
 
-  def self.write_to_document
+  def self.write_to_document(data)
     of = app('Omnifocus')
     dd = of.default_document
-    props = {:name => 'New Task', :note => 'Check out these notes'}
+    note_data = convert_to_string(data)
+    props = {:name => 'Shopping List', :note => note_data}
     dd.make(:new => :inbox_task, :with_properties => props)
+  end
+
+  def self.convert_to_string(data)
+    due_array = data.get_due_by_store
+    due_array.join(' --- ')
   end
 end
 
-o = OmniFocus.write_to_document
+

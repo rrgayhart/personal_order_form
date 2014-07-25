@@ -24,6 +24,10 @@ class Engine
     end
   end
 
+  def write_to_omnifocus
+    OmniFocus.write_to_document(order_form)
+  end
+
   def start_print
     order_form.get_due_by_store
   end
