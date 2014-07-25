@@ -3,6 +3,7 @@ require('date')
 require_relative('./order_form')
 require_relative('./order_item')
 require_relative('./read-object-json')
+require_relative('./omnifocus')
 
 class Engine
   attr_accessor :order_form, :file_name
