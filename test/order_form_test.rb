@@ -61,4 +61,24 @@ class OrderFormTest < MiniTest::Unit::TestCase
     @of.remove(@of.order_items.first.name)
     assert_equal 2, @of.order_items.length
   end
+
+  def test_pull_hash_by_name
+    assert_equal 'toilet paper', @of.get_items_by_name('toilet paper').first.name
+  end
+
+  def test_replace_items
+    replaceable_hash = [{"name"=>"toilet paper", "frequency"=>"6 months", "locations"=>["sephora", "birchbox"], "lastPurchase"=>"6/15/2014"},
+    {"name"=>"toilet paper", "frequency"=>"7 months", "locations"=>["walgreens"], "lastPurchase"=>"07/15/2014"}]
+    tp = @of.get_items_by_name('toilet paper')
+    assert_equal 1, tp.count
+    assert_equal ["costco", "safeway"], tp.first.locations
+    @of.replace_items(['toilet paper', 'toilet paper'], replaceable_hash)
+    tp_hash = @of.get_item_hashes_by_name('toilet paper')
+    assert_equal 2, tp_hash.count
+    assert_equal replaceable_hash, tp_hash
+  end
+
+  def test_replace_items_works_with_names_changed
+    skip
+  end
 end

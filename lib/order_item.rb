@@ -42,7 +42,12 @@ class OrderItem
   end
 
   def get_locations
-    item_hash['locations']
+    l = item_hash['locations']
+    if l.class == String
+      l.split(', ')
+    else
+      l
+    end
   end
 
   def update_item(attrs)

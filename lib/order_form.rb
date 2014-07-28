@@ -16,16 +16,38 @@ class OrderForm
     end
   end
 
+  def replace_items(original_names, items_hash)
+    original_names.each do |name|
+      remove(name)
+    end
+    items_hash.each do |item|
+      add_new_item(item)
+    end
+  end
+
   def convert_order_items_to_hash
-    order_items.collect do |item|
+    convert_items_to_hash(order_items)
+  end
+
+  def convert_items_to_hash(list)
+    list.collect do |item|
       item.convert
     end
   end
 
-  def display_by_name(name)
-    names_list = order_items.select do |d|
+  def get_item_hashes_by_name(name)
+    items = get_items_by_name(name)
+    convert_items_to_hash(items)
+  end
+
+  def get_items_by_name(name)
+    order_items.select do |d|
       d.name.downcase == name
     end
+  end
+
+  def display_by_name(name)
+    names_list = get_items_by_name(name)
     full_pretty_print_list(names_list)
   end
 

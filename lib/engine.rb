@@ -37,6 +37,10 @@ class Engine
     print_one_item(oi)
   end
 
+  def pull_hash_by_name(name)
+    order_form.get_item_hashes_by_name(name)
+  end
+
   def print_one_item(item)
     order_form.full_pretty_print(item)
   end
@@ -47,6 +51,10 @@ class Engine
 
   def update_by_name(name)
     order_form.set_as_purchased_today(name)
+  end
+
+  def replace_items(original_names, item_hash)
+    order_form.replace_items(original_names, item_hash)
   end
 
   def add_new_item(new_item)

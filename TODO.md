@@ -1,6 +1,10 @@
 Small Code Challenges
 ----------
 
+Allow user to edit order items
+
+Improve search by name logic
+
 Break out run and test run
 
 Add validations on creating order items
@@ -8,8 +12,6 @@ Add validations on creating order items
 Update month frequency of order
 
 Let frequency accept other quantities of time (like days, weeks, years)
-
-Allow user to edit order items
 
 Hook up display by store (for due soon)
 -Also, display all per store - sorted alphabetically
@@ -22,8 +24,10 @@ Add a README.md
 
 Long terms
 ----------
+Set up universal alias or otherwise
+
 Set up script to write the original JSON file and create backup
 
 Script to write backup files every few days
 
-Hook up to OmniFocus to create a monthly task
+Create omnifocus project with items?

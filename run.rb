@@ -19,6 +19,7 @@ class Run
      ['all', 'See all items'],
      ['new', 'Add a new item'],
      ['delete ITEM NAME', 'Delete item by name'],
+     ['edit ITEM NAME', 'Edit item by name'],
      ['make list', 'Adds an omnifocus task']
     ]
   end
@@ -62,7 +63,11 @@ class Run
       name = $1.strip
       confirm_delete(name)
       prompt
-    when 'make list'
+    when /^edit(.*)$/
+      name = $1.strip
+      begin_edit(name)
+      prompt
+   when 'make list'
       write_to_omnifocus
       prompt
     when 'save'
@@ -73,6 +78,52 @@ class Run
     else
       output.puts 'Command ' + user_input + 'not recognized.'
       prompt
+    end
+  end
+
+  def begin_edit(name)
+    item_data = engine.pull_hash_by_name(name)
+    if item_data.any?
+      items_for_edit = engine.display_by_name(name)
+      output.puts items_for_edit
+      edit_per_field(item_data)
+    else
+      output.puts 'Nothing was found by the name ' + name
+    end
+  end
+
+  def edit_per_field(item_data)
+    output.puts "#{item_data.length} items found."
+    output.puts 'Hit enter to keep existing data'
+    output.puts 'Or input different information and then hit enter to change'
+    new_item_data = []
+    item_data.each do |item|
+      new_item = {'original_name' => item['name']}
+      item.each do |k, v|
+        output.puts k + ' : ' + v.to_s
+        change = input.gets.chomp
+        if change.length > 2
+          new_item[k] = change
+        else
+          new_item[k] = v
+        end
+      end
+      new_item_data.push(new_item)
+    end
+    confirm_edit(new_item_data)
+  end
+
+  def confirm_edit(new_item_data)
+    output.puts 'The following changes will be added:'
+    original_names = new_item_data.collect {|i| i.delete('original_name')}
+    new_item_data.each do |item|
+      output.puts engine.print_one_hash(item)
+    end
+    output.puts '-' * 20
+    output.puts 'Please confirm these changes. (yes, no)'
+      confirmation = input.gets.chomp
+    if confirmation == 'yes'
+      engine.replace_items(original_names, new_item_data)
     end
   end
 
@@ -112,7 +163,7 @@ class Run
     date = input.gets.chomp
     output.puts 'Enter a list of locations where item is purchased'
     output.puts 'Seperated by commas'
-    locations = input.gets.chomp.split(', ')
+    locations = input.gets.chomp
     unformatted_new_item = {'name' => name,
                 'frequency' => freq,
                 'lastPurchase' => date,
@@ -129,7 +180,6 @@ class Run
       engine.add_new_item(unformatted_new_item)
     elsif confirmation == 'no'
       output.puts 'Let\'s start over'
-      run('new')
     end
   end
 
