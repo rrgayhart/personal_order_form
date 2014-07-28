@@ -1,7 +1,7 @@
 Small Code Challenges
 ----------
 
-Allow user to edit order items
+Clean up and test mammoth edit order items
 
 Improve search by name logic
 
@@ -13,11 +13,6 @@ Update month frequency of order
 
 Let frequency accept other quantities of time (like days, weeks, years)
 
-Hook up display by store (for due soon)
--Also, display all per store - sorted alphabetically
-
-Add stars to the front of items due soon in display all views
-
 Hook up ENV variables to change out files being read from
 
 Add a README.md
@@ -26,7 +21,9 @@ Long terms
 ----------
 Set up universal alias or otherwise
 
-Set up script to write the original JSON file and create backup
+Convert to gem
+
+Set up script to write the original JSON file and create backup log
 
 Script to write backup files every few days
 

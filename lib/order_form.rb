@@ -78,13 +78,16 @@ class OrderForm
 
   def due_or_past_due
     order_items.select do |item|
-      item.months_until_purchase < 1
+      item.due_soon?
     end
   end
 
   def full_pretty_print(item)
     response = [item.name, ':', 'bought every', item.combine_frequency, '(', item.last_purchase, ')', 'at']
     response.push(item.locations.join(' or '))
+    if item.due_soon?
+      response.unshift('* ')
+    end
     response.join(' ')
   end
 

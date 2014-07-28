@@ -63,6 +63,10 @@ class OrderItem
     year_difference + month_difference
   end
 
+  def due_soon?
+    self.months_until_purchase < 1
+  end
+
   def months_until_purchase
     purch_date = self.last_purchase
     self.freq_count - months_since_last_purchase(purch_date)
