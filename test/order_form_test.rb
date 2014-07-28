@@ -77,8 +77,4 @@ class OrderFormTest < MiniTest::Unit::TestCase
     assert_equal 2, tp_hash.count
     assert_equal replaceable_hash, tp_hash
   end
-
-  def test_replace_items_works_with_names_changed
-    skip
-  end
 end

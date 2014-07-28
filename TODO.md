@@ -1,6 +1,12 @@
 Small Code Challenges
 ----------
 
+Add postpone purchase item command
+
+Add set due item command (changes monthly frequency)
+
+Add confirmation that save is not required on quit
+
 Clean up and test mammoth edit order items
 
 Improve search by name logic
@@ -8,8 +14,6 @@ Improve search by name logic
 Break out run and test run
 
 Add validations on creating order items
-
-Update month frequency of order
 
 Let frequency accept other quantities of time (like days, weeks, years)
 
@@ -23,8 +27,10 @@ Set up universal alias or otherwise
 
 Convert to gem
 
-Set up script to write the original JSON file and create backup log
+Improve command listing (per Otask)
 
-Script to write backup files every few days
+Utilize optstruct and optparse (per Otask)
 
 Create omnifocus project with items?
+
+Show diff of changes before save

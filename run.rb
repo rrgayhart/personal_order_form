@@ -1,12 +1,13 @@
 require_relative('lib/engine')
 
 class Run
-  attr_reader :input, :output, :engine
+  attr_reader :input, :output, :engine, :environ
 
   def initialize(input = $stdin, output = $stdout)
     @input = input
     @output = output
-    @engine = Engine.new('development')
+    @environ = 'development'
+    @engine = Engine.new(environ)
     run('init')
   end
 
@@ -45,6 +46,9 @@ class Run
   def run(user_input)
     case user_input.downcase
     when 'init'
+      if environ == 'production'
+        run_backup
+      end
       full_prompt
     when /^purchased(.*)$/
       answer = $1.strip
@@ -79,6 +83,10 @@ class Run
       output.puts 'Command ' + user_input + 'not recognized.'
       prompt
     end
+  end
+
+  def run_backup
+    ReadObjectJSON.write_to_backup(engine.order_form.convert_order_items_to_hash)
   end
 
   def begin_edit(name)
@@ -210,5 +218,4 @@ class Run
   end
 end
 
-r = Run.new
-
+Run.new
