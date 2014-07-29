@@ -1,9 +1,11 @@
 Small Code Challenges
 ----------
 
-Add postpone purchase item command
+Let frequency accept other quantities of time (like days, weeks, years)
 
-Add set due item command (changes monthly frequency)
+Test Run
+
+Refactor tractor on order form repetition
 
 Add confirmation that save is not required on quit
 
@@ -14,8 +16,6 @@ Improve search by name logic
 Break out run and test run
 
 Add validations on creating order items
-
-Let frequency accept other quantities of time (like days, weeks, years)
 
 Hook up ENV variables to change out files being read from
 

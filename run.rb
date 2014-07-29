@@ -1,14 +1,13 @@
 require_relative('lib/engine')
 
 class Run
-  attr_reader :input, :output, :engine, :environ
+  attr_accessor :input, :output, :engine, :environ
 
-  def initialize(input = $stdin, output = $stdout)
+  def initialize(environ, input = $stdin, output = $stdout)
     @input = input
     @output = output
-    @environ = 'development'
+    @environ = environ
     @engine = Engine.new(environ)
-    run('init')
   end
 
   def commands
@@ -17,10 +16,13 @@ class Run
      ['quit', 'Exit without Saving'],
      ['save', 'Save changes and exit'],
      ['due', 'See all upcoming and due items'],
+     ['due next', 'See all items due next month'],
      ['all', 'See all items'],
      ['new', 'Add a new item'],
      ['delete ITEM NAME', 'Delete item by name'],
      ['edit ITEM NAME', 'Edit item by name'],
+     ['postpone ITEM NAME', 'Increase monthly purchase frequency'],
+     ['set due ITEM NAME', 'Set item as due this month'],
      ['make list', 'Adds an omnifocus task']
     ]
   end
@@ -57,6 +59,9 @@ class Run
     when 'due'
       see_all_due
       prompt
+    when 'due next'
+      see_due_next_month
+      prompt
     when 'all'
       see_all
       prompt
@@ -71,7 +76,15 @@ class Run
       name = $1.strip
       begin_edit(name)
       prompt
-   when 'make list'
+    when /^postpone(.*)$/
+      name = $1.strip
+      postpone(name)
+      prompt
+    when /^set due(.*)$/
+      name = $1.strip
+      set_due(name)
+      prompt
+    when 'make list'
       write_to_omnifocus
       prompt
     when 'save'
@@ -89,15 +102,26 @@ class Run
     ReadObjectJSON.write_to_backup(engine.order_form.convert_order_items_to_hash)
   end
 
+  def set_due(name)
+    output.puts engine.set_due(name)
+  end
+
+  def postpone(name)
+    output.puts engine.postpone(name)
+  end
+
   def begin_edit(name)
     item_data = engine.pull_hash_by_name(name)
     if item_data.any?
-      items_for_edit = engine.display_by_name(name)
-      output.puts items_for_edit
+      display_item(name)
       edit_per_field(item_data)
     else
       output.puts 'Nothing was found by the name ' + name
     end
+  end
+
+  def display_item(name)
+    output.puts engine.display_by_name(name)
   end
 
   def edit_per_field(item_data)
@@ -200,6 +224,10 @@ class Run
     output.puts engine.start_print
   end
 
+  def see_due_next_month
+    output.puts engine.see_due_next_month
+  end
+
   def see_all
     output.puts engine.see_all
   end
@@ -217,5 +245,3 @@ class Run
     engine.save
   end
 end
-
-Run.new

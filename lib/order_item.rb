@@ -50,6 +50,30 @@ class OrderItem
     end
   end
 
+  def postpone
+    self.freq_count += 1
+  end
+
+  def set_due
+    case self.freq_type
+    when /^month(.*)$/
+      difference = self.freq_count - self.months_until_purchase
+      if difference > 0
+        self.freq_count = difference
+      else
+        self.freq_count = 1
+        self.set_last_purchase_prev_month
+      end
+    else
+      raise 'INVALID FREQUENCY'
+    end
+  end
+
+  def set_last_purchase_prev_month
+    prev_month = convert_date(self.last_purchase).prev_month
+    self.last_purchase = date_to_s(prev_month)
+  end
+
   def update_item(attrs)
     case attrs[:field]
     when 'last_purchase'
@@ -57,9 +81,9 @@ class OrderItem
     end
   end
 
-  def months_since_last_purchase(purch_date)
-    year_difference = (Date.today.year - convert_date(purch_date).year) * 12
-    month_difference = Date.today.month - convert_date(purch_date).month
+  def months_since_last_purchase
+    year_difference = (Date.today.year - convert_date(self.last_purchase).year) * 12
+    month_difference = Date.today.month - convert_date(self.last_purchase).month
     year_difference + month_difference
   end
 
@@ -67,9 +91,12 @@ class OrderItem
     self.months_until_purchase < 1
   end
 
+  def due_in_months(m)
+    self.months_until_purchase == m
+  end
+
   def months_until_purchase
-    purch_date = self.last_purchase
-    self.freq_count - months_since_last_purchase(purch_date)
+    self.freq_count - months_since_last_purchase
   end
 
 end

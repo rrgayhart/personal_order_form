@@ -1,7 +1,7 @@
 require 'minitest/autorun'
 require_relative '../lib/engine'
 
-class OrderFormTest < MiniTest::Unit::TestCase
+class OrderFormTest < Minitest::Test
 
   def setup
     @today = Date.today.strftime('%m/%d/%Y')
@@ -76,5 +76,12 @@ class OrderFormTest < MiniTest::Unit::TestCase
     tp_hash = @of.get_item_hashes_by_name('toilet paper')
     assert_equal 2, tp_hash.count
     assert_equal replaceable_hash, tp_hash
+  end
+
+  def test_postpone_items
+    tp = @of.order_items.first
+    assert_equal 4, tp.freq_count
+    @of.postpone(tp.name)
+    assert_equal 5, tp.freq_count
   end
 end

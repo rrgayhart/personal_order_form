@@ -29,7 +29,11 @@ class Engine
   end
 
   def start_print
-    order_form.get_due_by_store
+    order_form.get_due_soon
+  end
+
+  def see_due_next_month
+    order_form.get_due_soon(1)
   end
 
   def print_one_hash(hash)
@@ -59,6 +63,16 @@ class Engine
 
   def add_new_item(new_item)
     order_form.add_new_item(new_item)
+  end
+
+  def postpone(name)
+    order_form.postpone(name)
+    order_form.display_frequency(name)
+  end
+
+  def set_due(name)
+    order_form.set_due(name)
+    order_form.display_frequency(name)
   end
 
   def see_all

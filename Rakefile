@@ -5,5 +5,5 @@ Rake::TestTask.new do |t|
 end
 
 task :run do
-  ruby 'run.rb'
+  ruby 'temp_run.rb'
 end

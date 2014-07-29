@@ -51,6 +51,28 @@ class OrderForm
     full_pretty_print_list(names_list)
   end
 
+  def set_due(name)
+    order_items.each do |item|
+      if name.downcase == item.name
+        item.set_due
+      end
+    end
+  end
+
+  def postpone(name)
+    order_items.each do |item|
+      if name.downcase == item.name
+        item.postpone
+      end
+    end
+  end
+
+  def display_frequency(name)
+    get_items_by_name(name).collect do |i|
+      i.name + ' | is due every ' + i.combine_frequency
+    end
+  end
+
   def set_as_purchased_today(input_name)
     @order_items.each do |item|
       if input_name == item.name
@@ -65,15 +87,19 @@ class OrderForm
     end
   end
 
-  def get_due_by_store(attrs = nil)
+  def get_due_soon(attrs = nil)
     if attrs
-      answer = due_or_past_due.select do |item|
-        item.locations.join(' ').downcase.include?(attrs.downcase)
-      end
+      answer = due_soon(attrs)
     else
       answer = due_or_past_due
     end
     pretty_print_list(answer)
+  end
+
+  def due_soon(month)
+    order_items.select do |item|
+      item.due_in_months(month)
+    end
   end
 
   def due_or_past_due

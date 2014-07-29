@@ -1,7 +1,7 @@
 require 'minitest/autorun'
 require_relative '../lib/engine'
 
-class OrderItemTest < MiniTest::Unit::TestCase
+class OrderItemTest < Minitest::Test
 
   def setup
     @today = Date.today.strftime('%m/%d/%Y')
@@ -28,12 +28,7 @@ class OrderItemTest < MiniTest::Unit::TestCase
   end
 
   def test_it_gets_months_since_last_purchase
-    assert_equal 4, @oi.months_since_last_purchase(@four_months_ago)
-  end
-
-  def test_it_gets_months_since_last_purchase_over_a_year_ago
-    one_year_one_month_ago = Date.today.prev_year.prev_month.strftime('%m/%d/%Y')
-    assert_equal 13, @oi.months_since_last_purchase(one_year_one_month_ago)
+    assert_equal 0, @oi.months_since_last_purchase
   end
 
   def test_it_gets_zero_months_until_purchase
@@ -52,5 +47,44 @@ class OrderItemTest < MiniTest::Unit::TestCase
     negative_data = {"name"=>"shaving cream", "frequency"=>"2 months", "locations"=>["amazon"], "lastPurchase"=>@four_months_ago}
     negative_item = OrderItem.new(negative_data)
     assert_equal -2, negative_item.months_until_purchase
+  end
+
+  def test_it_sets_due_in_a_normal_context
+    item_hash = {"name"=>"tooth paste", "frequency"=>"6 months", "locations"=>["amazon", "costco"], "lastPurchase"=>@four_months_ago}
+    order_item = OrderItem.new(item_hash)
+    assert_equal 2, order_item.months_until_purchase
+    assert_equal '6 months', order_item.combine_frequency
+    order_item.set_due
+    assert_equal 0, order_item.months_until_purchase
+    assert_equal '4 months', order_item.combine_frequency
+  end
+
+  def test_set_due_does_not_change_if_item_is_due_now
+    item_hash = {"name"=>"tooth paste", "frequency"=>"4 months", "locations"=>["amazon", "costco"], "lastPurchase"=>@four_months_ago}
+    order_item = OrderItem.new(item_hash)
+    assert_equal 0, order_item.months_until_purchase
+    order_item.set_due
+    assert_equal 0, order_item.months_until_purchase
+    assert_equal '4 months', order_item.combine_frequency
+  end
+
+  def test_set_due_behaves_if_item_is_past_due
+    item_hash = {"name"=>"tooth paste", "frequency"=>"2 months", "locations"=>["amazon", "costco"], "lastPurchase"=>@four_months_ago}
+    order_item = OrderItem.new(item_hash)
+    assert_equal -2, order_item.months_until_purchase
+    order_item.set_due
+    assert_equal 0, order_item.months_until_purchase
+    assert_equal '4 months', order_item.combine_frequency
+  end
+
+  def test_set_due_bug_sets_frequency_to_zero_if_last_purchase_this_month
+    one_month_ago = Date.today.prev_month.strftime('%m/%d/%Y')
+    item_hash = {"name"=>"tooth paste", "frequency"=>"3 months", "locations"=>["amazon", "costco"], "lastPurchase"=>@today}
+    order_item = OrderItem.new(item_hash)
+    assert_equal 3, order_item.months_until_purchase
+    order_item.set_due
+    assert_equal 0, order_item.months_until_purchase
+    assert_equal '1 months', order_item.combine_frequency
+    assert_equal one_month_ago, order_item.last_purchase
   end
 end

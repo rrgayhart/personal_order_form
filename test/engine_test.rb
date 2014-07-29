@@ -1,7 +1,7 @@
 require 'minitest/autorun'
 require_relative '../lib/engine'
 
-class EngineTest < MiniTest::Unit::TestCase
+class EngineTest < Minitest::Test
 
   def setup
   end
