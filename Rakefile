@@ -5,5 +5,9 @@ Rake::TestTask.new do |t|
 end
 
 task :run do
-  ruby 'temp_run.rb'
+  ruby 'temp_run production'
+end
+
+task :dev do
+  ruby 'temp_run development'
 end

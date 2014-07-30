@@ -1,0 +1,8 @@
+#!/usr/bin/env ruby
+
+require_relative('run')
+
+environ = ARGV.shift
+
+r = Run.new(environ)
+r.run('init')
