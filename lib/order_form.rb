@@ -51,6 +51,13 @@ class OrderForm
     full_pretty_print_list(names_list)
   end
 
+  def display_item_fuzzy(name)
+    names_list = order_items.select do |i|
+      i.name.match(name)
+    end
+    full_pretty_print_list(names_list)
+  end
+
   def set_due(name)
     order_items.each do |item|
       if name.downcase == item.name

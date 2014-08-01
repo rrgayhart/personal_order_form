@@ -53,6 +53,10 @@ class Engine
     order_form.display_by_name(name)
   end
 
+  def display_item_fuzzy(name)
+    order_form.display_item_fuzzy(name)
+  end
+
   def update_by_name(name)
     order_form.set_as_purchased_today(name)
   end

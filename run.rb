@@ -19,6 +19,7 @@ class Run
      ['due next', 'See all items due next month'],
      ['all', 'See all items'],
      ['new', 'Add a new item'],
+     ['show ITEM NAME', 'Show item'],
      ['delete ITEM NAME', 'Delete item by name'],
      ['edit ITEM NAME', 'Edit item by name'],
      ['postpone ITEM NAME', 'Increase monthly purchase frequency'],
@@ -76,6 +77,10 @@ class Run
       name = $1.strip
       begin_edit(name)
       prompt
+    when /^show(.*)$/
+      name = $1.strip
+      begin_show(name)
+      prompt
     when /^postpone(.*)$/
       name = $1.strip
       postpone(name)
@@ -108,6 +113,10 @@ class Run
 
   def postpone(name)
     output.puts engine.postpone(name)
+  end
+
+  def begin_show(name)
+    output.puts engine.display_item_fuzzy(name)
   end
 
   def begin_edit(name)
